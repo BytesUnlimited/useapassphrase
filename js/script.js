@@ -1,23 +1,24 @@
 'use strict';
 
-function generatePassword(numberOfWords, spaces) {
+// Cryptographic replacement for Math.random()
+function randomNumberBetweenZeroAndOne() {
+  var crypto = window.crypto || window.msCrypto;
+  return crypto.getRandomValues(new Uint32Array(1))[0] / 4294967295;
+}
 
+function generatePassword(numberOfWords, spaces) {
   if (spaces === undefined) {
     spaces = true;
   }
-  // Cryptographically generated random numbers
   numberOfWords = parseInt(numberOfWords);
-  var array = new Uint32Array(numberOfWords);
-  var crypto = window.crypto || window.msCrypto;
-  crypto.getRandomValues(array);
 
   // Empty array to be filled with wordlist
   var generatedPasswordArray = [];
 
 
   // Grab a random word, push it to the password array
-  for (var i = 0; i < array.length; i++) {
-      var index = (array[i] % 7776); //5852 - 5837 = 15
+  for (var i = 0; i < numberOfWords; i++) {
+      var index = Math.floor(randomNumberBetweenZeroAndOne() * 7776)
     generatedPasswordArray.push(wordlist[index]);
   }
 
